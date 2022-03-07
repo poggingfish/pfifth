@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import time, sys
+
+from sympy import false
 stack = [];
 program = [];
 words = {}
@@ -16,6 +18,7 @@ def run(program):
     global load_program
     global variables
     global words
+    global interactive
     load_data = []
     load = False
     load_wait = False
@@ -112,7 +115,21 @@ def run(program):
         elif x == "words":
             for x in words:
                 print(x)
+        elif x == "bye" and interactive == True:
+            print("Bye!")
+            exit(0)
+        elif x == "stack" and interactive == True:
+            for i in stack:
+                print(i)
         else:
             stack.append(int(x));
+interactive = False
 run(load_builtins())
+for x in sys.argv[2:]:
+    if x == "interactive":
+        interactive = True
+        while True:
+            print(">>> ", end="")
+            run(input().split(" "))
+            print("")
 run(program)
