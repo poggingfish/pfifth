@@ -6,6 +6,7 @@ Python interpreter for the "Fifth" recreational language.
 - Python 3 or higher
 #### Run the following command:
 ###### (standard library is recommended)
+###### Installs to /usr/bin/fifth and librarys go to /usr/share/fifth
 ```sudo ./fifth.py install```
 ## why tho?
 Because why not?
