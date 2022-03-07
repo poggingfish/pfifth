@@ -24,3 +24,15 @@ List all words (functions)
 ```
 words
 ```
+# TODO
+- [ ] Elif statements (if else)
+- [ ] Foreach loop (for)
+- [ ] Comments
+- [ ] Arrays
+- [ ] Documentation
+- [ ] Comments (in source code)
+- [ ] Proper error handling
+- [ ] Rewrite in C/C++ or Rust :crab:
+- [ ] Compile to assembly
+- [ ] Selfhost (after compilation is done and tested)
+- [x] Make a todo list that is super long!!
