@@ -103,10 +103,10 @@ def run(program):
         elif x == "set":
             variables.update({stack.pop(): stack.pop()})
         elif x == "get":
-            stack.append(variables[stack.pop()]);
+            stack.append(variables[stack.pop()])
         elif x == "execute":
-            run(load_program(open(stack.pop())));
+            run(load_program(open(stack.pop())))
         else:
             stack.append(int(x));
-run(load_program(open("builtins.fth")))
+run(load_program(open("builtins.fifth")))
 run(program)
