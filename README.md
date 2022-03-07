@@ -1,7 +1,7 @@
 # PFifth
 Python interpreter for the "Fifth" recreational language.
 ## Installation 
-### ! LINUX ONLY !
+### <i><b>LINUX ONLY</b></i>
 #### Install the following packages:
 - Python 3 or higher
 #### Run the following command:
