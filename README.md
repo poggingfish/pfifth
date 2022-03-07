@@ -13,7 +13,8 @@ Because why not?
 ## how tho?
 Hello world:
 ```
-" Hello, world! " . nl
+" std.fifth " execute
+" Hello, world! " .n
 ```
 Addition
 ```
