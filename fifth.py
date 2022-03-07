@@ -9,7 +9,7 @@ def load_program(file):
     global program
     return file.read().replace("\n"," ").split()
 def load_builtins():
-    return ['"', 'nl', '"', 'word', '10', 'emit', 'endword', '"', 'iterate', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '+', '"', 'var', '"', 'get', 'set', 'endword']
+    return ['"', 'nl', '"', 'word', '10', 'emit', 'endword', '"', 'iterate', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '+', '"', 'var', '"', 'get', 'set', 'endword', '"', 'decrement', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '-', '"', 'var', '"', 'get', 'set', 'endword']
 def run(program):
     global stack
     global load_program
@@ -42,6 +42,13 @@ def run(program):
                         else:
                             for x in range(loop_amount):
                                 run(load_data[0:])
+                        load_data = []
+                        continue
+                if load_type == "while":
+                    if x == "endwhile":
+                        load = False
+                        while stack.pop() == stack.pop():
+                            run(load_data[0:])
                         load_data = []
                         continue
                 if load_type == "string":
@@ -125,6 +132,9 @@ def run(program):
                     print(x)
             elif x == "pop":
                 stack.pop()
+            elif x == "while":
+                load_type = "while"
+                load = True
             elif x == "bye" and interactive == True:
                 print("Bye!")
                 exit(0)
@@ -171,5 +181,12 @@ for x in sys.argv[1:]:
                 print("I don't understand that. And I won't install the standard word library.")
             print("Installed!")
             exit(0)
+    if x == "builtins":
+        for x in load_builtins():
+            print(x)
+            exit(0)
+    if x == "load-program":
+        print(load_program(open(sys.argv[2])))
+        exit(0)
 program = load_program(open(sys.argv[1]))
 run(program)
