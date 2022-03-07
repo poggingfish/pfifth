@@ -128,7 +128,7 @@ def run(program):
             else:
                 stack.append(int(x));
         except:
-            print("Something went wrong at instruction "+str(x) + "!")
+            print("Something went wrong at instruction "+str(x))
             if interactive != True:
                 exit(1)
             load = False
