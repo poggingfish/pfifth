@@ -95,6 +95,14 @@ def run(program):
                         if load_data[0] == ">":
                             if if1 > if2:
                                 run(load_data[1:])
+                if load_type == "for":
+                    if x == "endfor":
+                        for x in stack.pop():
+                            stack.append(x)
+                            run(load_data[0:])
+                        load = False
+                        load_data = []
+                        continue
                 load_data.append(x.replace("n:",""))
                 continue
             if x in words:
@@ -162,6 +170,18 @@ def run(program):
             elif x == "#":
                 load_type="ignore"
                 load=True
+            elif x == "array_init":
+                new_array = []
+                stack.append(new_array)
+            elif x == "array_add":
+                stack[0].append(stack.pop())
+            elif x == "for":
+                load_type="for"
+                load=True
+            elif x == "index":
+                pop1 = stack.pop()
+                pop2 = stack.pop()
+                stack.append(pop2[pop1])
             elif x == "bye" and interactive == True:
                 print("Bye!")
                 exit(0)

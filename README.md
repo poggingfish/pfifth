@@ -26,8 +26,8 @@ words
 ```
 # TODO
 - [x] Elif statements (if else) (kinda useless rn)
-- [ ] Arrays
-- [ ] Foreach loop (for)
+- [x] Arrays
+- [x] Foreach loop (for)
 - [x] Comments
 - [ ] Documentation
 - [ ] Comments (in source code)

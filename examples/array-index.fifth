@@ -1,0 +1,7 @@
+array_init " test " set
+" test " get 1 array_add " test " set
+" test " get 2 array_add " test " set 
+" test " get 3 array_add " test " set
+" test " get 67 array_add " test " set
+" test " get 1 index 
+.
