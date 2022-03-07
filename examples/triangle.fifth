@@ -1,0 +1,10 @@
+0 " iter " set
+" How long should the triangle be: " . stdin toint
+loop
+" iter " iterate
+" iter " get
+loop
+" * " .
+n:endloop
+nl
+endloop
