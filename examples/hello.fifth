@@ -1,2 +1,3 @@
 " std.fifth " execute
 " Hello, world! " .n
+# I am a comment. This should do nothing! ;

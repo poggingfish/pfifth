@@ -8,3 +8,4 @@ loop
 n:endloop
 nl
 endloop
+# I am a comment. This should do nothing! ;

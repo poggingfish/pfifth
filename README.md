@@ -25,10 +25,10 @@ List all words (functions)
 words
 ```
 # TODO
-- [ ] Elif statements (if else)
-- [ ] Foreach loop (for)
-- [ ] Comments
+- [x] Elif statements (if else) (kinda useless rn)
 - [ ] Arrays
+- [ ] Foreach loop (for)
+- [x] Comments
 - [ ] Documentation
 - [ ] Comments (in source code)
 - [ ] Proper error handling

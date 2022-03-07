@@ -57,7 +57,14 @@ def run(program):
                         load = False
                         load_data = []
                         continue
+                if load_type == "ignore":
+                    if x == ";":
+                        load = False
+                        load_data = []
+                    continue
                 if load_type == "if":
+                    previous_if1 = if1
+                    previous_if2 = if2
                     if x == "endif":
                         if load_data[0] == "=":
                             if if1 == if2:
@@ -74,6 +81,20 @@ def run(program):
                         load = False
                         load_data = []
                         continue
+                if load_type == "else":
+                    if previous_if1!=previous_if2 and if1==if2:
+                        if load_data[0] == "=":
+                            if if1 == if2:
+                                run(load_data[1:])
+                        if load_data[0] == "!":
+                            if if1 != if2:
+                                run(load_data[1:])
+                        if load_data[0] == "<":
+                            if if1 < if2:
+                                run(load_data[1:])
+                        if load_data[0] == ">":
+                            if if1 > if2:
+                                run(load_data[1:])
                 load_data.append(x.replace("n:",""))
                 continue
             if x in words:
@@ -135,6 +156,12 @@ def run(program):
             elif x == "while":
                 load_type = "while"
                 load = True
+            elif x == "else":
+                load_type = "else"
+                load = True
+            elif x == "#":
+                load_type="ignore"
+                load=True
             elif x == "bye" and interactive == True:
                 print("Bye!")
                 exit(0)
