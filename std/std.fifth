@@ -10,3 +10,14 @@ endword
 " .n " word
 . nl
 endword
+" pti " word
+" arr " set
+1
+" arr " get
+arln
+-
+" value " set
+" arr " get
+" value " get
+index
+endword

@@ -182,6 +182,8 @@ def run(program):
                 pop1 = stack.pop()
                 pop2 = stack.pop()
                 stack.append(pop2[pop1])
+            elif x == "arln":
+                stack.append(len(stack.pop()))
             elif x == "bye" and interactive == True:
                 print("Bye!")
                 exit(0)
