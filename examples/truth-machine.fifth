@@ -1,0 +1,11 @@
+stdin toint " truth " set
+" truth " get
+0 if =
+0 . nl
+endif
+" truth " get
+1 if =
+0 loop
+1 .
+endloop
+endif

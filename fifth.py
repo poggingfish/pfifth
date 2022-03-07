@@ -36,8 +36,12 @@ def run(program):
                     if x == "endloop":
                         loop_amount = stack.pop()
                         load = False
-                        for x in range(loop_amount):
-                            run(load_data[0:])
+                        if loop_amount == 0:
+                            while True:
+                                run(load_data[0:])
+                        else:
+                            for x in range(loop_amount):
+                                run(load_data[0:])
                         load_data = []
                         continue
                 if load_type == "string":
@@ -76,7 +80,7 @@ def run(program):
             elif x == "/":
                 stack.append(stack.pop() / stack.pop())
             elif x == ".":
-                print(stack.pop(), end=" ")
+                print(stack.pop(), end="")
             elif x == "mod":
                 stack.append(stack.pop() % stack.pop())
             elif x == "dup":
@@ -129,7 +133,11 @@ def run(program):
                     print(i)
             else:
                 stack.append(int(x))
-        except:
+        except Exception as e:
+            #Check if exception is keyboard interrupt
+            if e == KeyboardInterrupt:
+                print("KeyboardInterrupt")
+                exit(0)
             print("Something went wrong at instruction "+str(x))
             if interactive != True:
                 exit(1)
