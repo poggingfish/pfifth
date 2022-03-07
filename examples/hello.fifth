@@ -1,1 +1,2 @@
-" Hello, world! " . nl
+" std.fifth " execute
+5 2 power . nl

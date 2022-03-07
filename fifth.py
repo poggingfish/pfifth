@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
+import os
 import time, sys
-
-from sympy import false
 stack = [];
 program = [];
 words = {}
@@ -110,10 +109,16 @@ def run(program):
             elif x == "get":
                 stack.append(variables[stack.pop()])
             elif x == "execute":
-                run(load_program(open(stack.pop())))
+                run_program = stack.pop()
+                try:
+                    run(load_program(open(run_program)))
+                except:
+                    run(load_program(open("/usr/share/fifth/" + run_program)))
             elif x == "words":
                 for x in words:
                     print(x)
+            elif x == "pop":
+                stack.pop()
             elif x == "bye" and interactive == True:
                 print("Bye!")
                 exit(0)
@@ -137,5 +142,24 @@ for x in sys.argv[1:]:
             print(">>> ", end="")
             run(input().split(" "))
             print("")
+    if x == "install":
+        if os.geteuid() != 0:
+            print("You must be root to install!")
+            exit(1)
+        else:
+            os.system("cp fifth.py /usr/bin/fifth")
+            std = input("Would you like to install the standard word library? (y/n) ")
+            if std == "y":
+                try:
+                    os.mkdir("/usr/share/fifth/")
+                except:
+                    pass
+                os.system("cp std/std.fifth /usr/share/fifth/std.fifth")
+            elif std == "n":
+                print("Okay, I won't install the standard word library.")
+            else:
+                print("I don't understand that. And I won't install the standard word library.")
+            print("Installed!")
+            exit(0)
 program = load_program(open(sys.argv[1]))
 run(program)

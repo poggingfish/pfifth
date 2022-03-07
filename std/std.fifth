@@ -1,0 +1,9 @@
+" power " word
+" power " set
+1
+" power " get
+-
+loop
+dup *
+endloop
+endword
