@@ -7,3 +7,6 @@ loop
 dup *
 endloop
 endword
+" .n " word
+. nl
+endword

@@ -1,2 +1,2 @@
 " std.fifth " execute
-5 2 power . nl
+" Hello, world! " .n
