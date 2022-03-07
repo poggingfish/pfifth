@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import time, sys
 stack = [];
 program = [];
@@ -8,6 +9,8 @@ def load_program(file):
     return file.read().replace("\n"," ").split();
 
 program = load_program(open(sys.argv[1]))
+def load_builtins():
+    return ['"', 'nl', '"', 'word', '10', 'emit', 'endword', '"', 'iterate', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '+', '"', 'var', '"', 'get', 'set', 'endword']
 def run(program):
     global stack
     global load_program
@@ -106,7 +109,10 @@ def run(program):
             stack.append(variables[stack.pop()])
         elif x == "execute":
             run(load_program(open(stack.pop())))
+        elif x == "words":
+            for x in words:
+                print(x)
         else:
             stack.append(int(x));
-run(load_program(open("builtins.fifth")))
+run(load_builtins())
 run(program)
