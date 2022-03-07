@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import os
 import time, sys
-stack = [];
-program = [];
+stack = []
+program = []
 words = {}
 variables = {}
 def load_program(file):
-    global program;
-    return file.read().replace("\n"," ").split();
+    global program
+    return file.read().replace("\n"," ").split()
 def load_builtins():
     return ['"', 'nl', '"', 'word', '10', 'emit', 'endword', '"', 'iterate', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '+', '"', 'var', '"', 'get', 'set', 'endword']
 def run(program):
@@ -19,7 +19,7 @@ def run(program):
     load_data = []
     load = False
     load_wait = False
-    load_type = "";
+    load_type = ""
     for x in program:
         try:
             if load == True:
@@ -66,39 +66,41 @@ def run(program):
                 load_data.append(x.replace("n:",""))
                 continue
             if x in words:
-                run(words[x].split(" "));
+                run(words[x].split(" "))
             elif x == "+":
-                stack.append(stack.pop() + stack.pop());
+                stack.append(stack.pop() + stack.pop())
             elif x == "-":
-                stack.append(stack.pop() - stack.pop());
+                stack.append(stack.pop() - stack.pop())
             elif x == "*":
-                stack.append(stack.pop() * stack.pop());
+                stack.append(stack.pop() * stack.pop())
             elif x == "/":
-                stack.append(stack.pop() / stack.pop());
+                stack.append(stack.pop() / stack.pop())
             elif x == ".":
-                print(stack.pop(), end=" ");
+                print(stack.pop(), end=" ")
+            elif x == "mod":
+                stack.append(stack.pop() % stack.pop())
             elif x == "dup":
-                x = stack.pop();
-                stack.append(x);
-                stack.append(x);
+                x = stack.pop()
+                stack.append(x)
+                stack.append(x)
             elif x == "word":
-                word_name = stack.pop();
+                word_name = stack.pop()
                 load = True
                 load_type = "word"
             elif x == "loop":
                 load_type = "loop"
                 load = True
             elif x == "sleep":
-                time.sleep(stack.pop()/1000);
+                time.sleep(stack.pop()/1000)
             elif x == "emit":
-                print(chr(stack.pop()), end="");
+                print(chr(stack.pop()), end="")
             elif x == '"':
                 load_type = "string"
                 load = True
             elif x == "stdin":
-                stack.append(input());
+                stack.append(input())
             elif x == "toint":
-                stack.append(int(stack.pop()));
+                stack.append(int(stack.pop()))
             elif x == "if":
                 load_type = "if"
                 load = True
@@ -126,7 +128,7 @@ def run(program):
                 for i in stack:
                     print(i)
             else:
-                stack.append(int(x));
+                stack.append(int(x))
         except:
             print("Something went wrong at instruction "+str(x))
             if interactive != True:
