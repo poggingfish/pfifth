@@ -21,3 +21,9 @@ arln
 " value " get
 index
 endword
+" swap " word
+" item2 " set
+" item1 " set
+" item2 " get
+" item1 " get
+endword

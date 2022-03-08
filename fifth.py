@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os
-import time, sys
+import time, sys, random
 stack = []
 program = []
 words = {}
@@ -175,6 +175,8 @@ def run(program):
                 stack.append(new_array)
             elif x == "array_add":
                 stack[0].append(stack.pop())
+            elif x == "array_pop":
+                stack.append(stack[0].pop())
             elif x == "for":
                 load_type="for"
                 load=True
@@ -184,6 +186,8 @@ def run(program):
                 stack.append(pop2[pop1])
             elif x == "arln":
                 stack.append(len(stack.pop()))
+            elif x == "random":
+                stack.append(random.randrange(stack.pop(), stack.pop()))
             elif x == "bye" and interactive == True:
                 print("Bye!")
                 exit(0)
@@ -205,12 +209,6 @@ def run(program):
 interactive = False
 run(load_builtins())
 for x in sys.argv[1:]:
-    if x == "interactive":
-        interactive = True
-        while True:
-            print(">>> ", end="")
-            run(input().split(" "))
-            print("")
     if x == "install":
         if os.geteuid() != 0:
             print("You must be root to install!")
