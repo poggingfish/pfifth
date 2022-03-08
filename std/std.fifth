@@ -30,3 +30,14 @@ endword
 " space " word
 32 emit
 endword
+" ctsws " word
+" string " set
+" string2 " set
+" string " get
+32 emit + " string2 " get +
+endword
+" reset_array " word
+for
+array_pop pop
+endfor
+endword

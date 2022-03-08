@@ -9,7 +9,7 @@ def load_program(file):
     global program
     return file.read().replace("\n"," ").split()
 def load_builtins():
-    return ['"', 'nl', '"', 'word', '10', 'emit', 'endword', '"', 'iterate', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '+', '"', 'var', '"', 'get', 'set', 'endword', '"', 'decrement', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '-', '"', 'var', '"', 'get', 'set', 'endword']
+    return ['"', 'nl', '"', 'word', '10', 'emit', '.', 'endword', '"', 'iterate', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '+', '"', 'var', '"', 'get', 'set', 'endword', '"', 'decrement', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '-', '"', 'var', '"', 'get', 'set', 'endword']
 def run(program):
     global stack
     global load_program
@@ -143,7 +143,7 @@ def run(program):
             elif x == "sleep":
                 time.sleep(stack.pop()/1000)
             elif x == "emit":
-                print(chr(stack.pop()), end="")
+                stack.append(chr(stack.pop()))
             elif x == '"':
                 load_type = "string"
                 load = True
@@ -187,6 +187,8 @@ def run(program):
                 stack[0].append(stack.pop())
             elif x == "array_pop":
                 stack.append(stack[0].pop())
+            elif x == "length":
+                stack.append(len(stack.pop()))
             elif x == "for":
                 load_type="for"
                 load=True
@@ -194,10 +196,18 @@ def run(program):
                 pop1 = stack.pop()
                 pop2 = stack.pop()
                 stack.append(pop2[pop1])
+            elif x == "change_index":
+                pop1 = stack.pop()
+                pop2 = stack.pop()
+                pop3 = stack.pop()
+                pop3[pop2] = pop1
+                stack.append(pop3)
             elif x == "arln":
                 stack.append(len(stack.pop()))
             elif x == "random":
                 stack.append(random.randrange(stack.pop(), stack.pop()))
+            elif x == "split":
+                stack.append(stack.pop().split(stack.pop()))
             elif x == "bye" and interactive == True:
                 print("Bye!")
                 exit(0)

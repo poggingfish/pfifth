@@ -1,0 +1,4 @@
+" Hello, world! " space swap split
+for
+. nl
+endfor
