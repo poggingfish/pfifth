@@ -3,5 +3,5 @@ array_init " test " set
 " test " get 2 array_add " test " set 
 " test " get 3 array_add " test " set
 " test " get 67 array_add " test " set
-" test " get stdin toint index 
-.
+" test " get " Enter a number: " . stdin toint index 
+. nl

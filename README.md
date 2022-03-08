@@ -52,7 +52,6 @@ words
 - [ ] Documentation 🖥️
 - [ ] Comments (in source code) :left_speech_bubble:
 - [ ] Proper error handling
-- [ ] Rewrite in C/C++ or Rust 🦀
-- [ ] Compile to assembly
+- [ ] Compile to assembly or c (not sure if i want to do this)
 - [ ] Selfhost (after compilation is done and tested) 😓
 - [x] Make a todo list that is super long!!
