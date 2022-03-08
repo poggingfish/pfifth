@@ -47,8 +47,18 @@ def run(program):
                 if load_type == "while":
                     if x == "endwhile":
                         load = False
-                        while stack.pop() == stack.pop():
-                            run(load_data[0:])
+                        if load_data[0] == "=":
+                            while stack.pop() == stack.pop():
+                                run(load_data[1:])
+                        if load_data[0] == "!":
+                            while stack.pop() != stack.pop():
+                                run(load_data[1:])
+                        if load_data[0] == "<":
+                            while stack.pop() < stack.pop():
+                                run(load_data[1:])
+                        if load_data[0] == ">":
+                            while stack.pop() > stack.pop():
+                                run(load_data[1:]) 
                         load_data = []
                         continue
                 if load_type == "string":

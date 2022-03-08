@@ -1,1 +1,22 @@
-5 1 random .
+" std.fifth " execute
+" In this game you have to guess the number between 1 and 500. " .n
+500 1 random " random " set
+0 " guess " set
+0 " input " set
+" input " get " random " get while !
+" Enter a number: " . space stdin toint " input " set
+" random " get " input " get if <
+" Your number is too low " .n
+endif
+" random " get " input " get if >
+" Your number is too high " .n
+endif
+" input " get " random " get
+" guess " iterate
+endwhile
+" guess " get 1 if !
+" You got it in " . space " guess " get . space " tries " .n
+endif
+" guess " get 1 if =
+" You got it in " . space " guess " get . space " try " .n
+endif

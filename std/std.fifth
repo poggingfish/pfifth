@@ -27,3 +27,6 @@ endword
 " item2 " get
 " item1 " get
 endword
+" space " word
+32 emit
+endword
