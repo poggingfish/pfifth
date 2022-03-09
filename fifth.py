@@ -5,6 +5,12 @@ stack = []
 program = []
 words = {}
 variables = {}
+def print_there(x, y, text):
+     sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (x, y, text))
+     sys.stdout.flush()
+def move (x, y):
+    sys.stdout.write("\033[%d;%dH" % (y, x))
+    sys.stdout.flush()
 def load_program(file):
     global program
     return file.read().replace("\n"," ").split()
@@ -151,6 +157,8 @@ def run(program):
                 stack.append(input())
             elif x == "toint":
                 stack.append(int(stack.pop()))
+            elif x == "tostr":
+                stack.append(str(stack.pop()))
             elif x == "if":
                 load_type = "if"
                 load = True
@@ -208,6 +216,25 @@ def run(program):
                 stack.append(random.randrange(stack.pop(), stack.pop()))
             elif x == "split":
                 stack.append(stack.pop().split(stack.pop()))
+            elif x == "pasp":
+                pop1 = stack.pop()
+                pop2 = stack.pop()
+                pop3 = stack.pop()
+                print_there(pop3, pop2, pop1)
+            elif x == "move_cursor":
+                move(stack.pop(), stack.pop())              
+            elif x == "clear_screen":
+                print("\033[2J")
+            elif x == "open_file":
+                stack.append(open(stack.pop()))
+            elif x == "open_file_write":
+                stack.append(open(stack.pop(), "w"))
+            elif x == "read_file":
+                stack.append(stack.pop().read())
+            elif x == "write_file":
+                stack.append(stack.pop().write(stack.pop()))
+            elif x == "close_file":
+                stack.append(stack.pop().close())
             elif x == "bye" and interactive == True:
                 print("Bye!")
                 exit(0)

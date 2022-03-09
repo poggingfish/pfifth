@@ -1,0 +1,20 @@
+" std.fifth " execute
+clear_screen
+" Bank of Garbage " .
+10 0 " Enter Balance: 00000 " pasp
+10 16 move_cursor stdin toint " balance " set
+" enough_money " word
+" Saving balance " .n
+" bank.txt " open_file_write " file " set
+" file " get " balance " get tostr swap write_file
+" file " get close_file
+endword
+99999 " balance " get if <
+enough_money
+endif
+99999 " balance " get if =
+enough_money
+endif
+99999 " balance " get if >
+" Too much money " .n
+endif

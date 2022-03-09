@@ -1,7 +1,7 @@
 " power " word
-" power " set
+" ___power " set
 1
-" power " get
+" ___power " get
 -
 loop
 dup *
@@ -11,30 +11,30 @@ endword
 . nl
 endword
 " pti " word
-" arr " set
+" ___arr " set
 1
-" arr " get
+" ___arr " get
 arln
 -
-" value " set
-" arr " get
-" value " get
+" ___value " set
+" ___arr " get
+" ___value " get
 index
 endword
 " swap " word
-" item2 " set
-" item1 " set
-" item2 " get
-" item1 " get
+" ___item2 " set
+" ___item1 " set
+" ___item2 " get
+" ___item1 " get
 endword
 " space " word
 32 emit
 endword
 " ctsws " word
-" string " set
-" string2 " set
-" string " get
-32 emit + " string2 " get +
+" ___string " set
+" ___string2 " set
+" ___string " get
+32 emit + " ___string2 " get +
 endword
 " reset_array " word
 for
