@@ -5,6 +5,7 @@ stack = []
 program = []
 words = {}
 variables = {}
+current_file = ""
 def print_there(x, y, text):
      sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (x, y, text))
      sys.stdout.flush()
@@ -22,12 +23,12 @@ def run(program):
     global variables
     global words
     global interactive
+    global current_file
     load_data = []
     load = False
-    load_wait = False
     load_type = ""
     for x in program:
-        try:
+        #try:
             if load == True:
                 if x == "endword":
                     if load_type == "word":
@@ -98,19 +99,23 @@ def run(program):
                         load_data = []
                         continue
                 if load_type == "else":
-                    if previous_if1!=previous_if2 and if1==if2:
-                        if load_data[0] == "=":
-                            if if1 == if2:
-                                run(load_data[1:])
-                        if load_data[0] == "!":
-                            if if1 != if2:
-                                run(load_data[1:])
-                        if load_data[0] == "<":
-                            if if1 < if2:
-                                run(load_data[1:])
-                        if load_data[0] == ">":
-                            if if1 > if2:
-                                run(load_data[1:])
+                    if x == "endif":
+                        if previous_if1!=previous_if2 and if1==if2:
+                            if load_data[0] == "=":
+                                if if1 == if2:
+                                 run(load_data[1:])
+                            if load_data[0] == "!":
+                                if if1 != if2:
+                                    run(load_data[1:])
+                            if load_data[0] == "<":
+                                if if1 < if2:
+                                    run(load_data[1:])
+                            if load_data[0] == ">":
+                                if if1 > if2:
+                                    run(load_data[1:])
+                            load = False
+                            load_data = []
+                            continue
                 if load_type == "for":
                     if x == "endfor":
                         for x in stack.pop():
@@ -226,15 +231,33 @@ def run(program):
             elif x == "clear_screen":
                 print("\033[2J")
             elif x == "open_file":
-                stack.append(open(stack.pop()))
+                file = stack.pop()
+                current_file = file
+                stack.append(open(file))
             elif x == "open_file_write":
-                stack.append(open(stack.pop(), "w"))
+                file = stack.pop()
+                current_file = file
+                stack.append(open(file, "w"))
             elif x == "read_file":
                 stack.append(stack.pop().read())
             elif x == "write_file":
                 stack.append(stack.pop().write(stack.pop()))
             elif x == "close_file":
                 stack.append(stack.pop().close())
+            elif x == "index_write":
+                pop1 = stack.pop()
+                pop2 = stack.pop()
+                pop3 = stack.pop()
+                pop3.close()
+                with open(current_file) as f:
+                    splitf = f.read().split(" ")
+                    splitf[pop2] = pop1
+                    final = ""
+                for x in splitf:
+                    final += str(x) + " "
+                stack.append(open(current_file, "w"))
+                pop3 = stack.pop()
+                pop3.write(final)
             elif x == "bye" and interactive == True:
                 print("Bye!")
                 exit(0)
@@ -243,16 +266,16 @@ def run(program):
                     print(i)
             else:
                 stack.append(int(x))
-        except Exception as e:
+        #except Exception as e:
             #Check if exception is keyboard interrupt
-            if e == KeyboardInterrupt:
-                print("KeyboardInterrupt")
-                exit(0)
-            print("Something went wrong at instruction "+str(x))
-            if interactive != True:
-                exit(1)
-            load = False
-            load_data = []
+        #    if e == KeyboardInterrupt:
+        #        print("KeyboardInterrupt")
+        #        exit(0)
+        #    print("Something went wrong at instruction "+str(x))
+        #    if interactive != True:
+        #        exit(1)
+        #    load = False
+        #    load_data = []
 interactive = False
 run(load_builtins())
 for x in sys.argv[1:]:

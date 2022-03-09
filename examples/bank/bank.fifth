@@ -1,20 +1,50 @@
 " std.fifth " execute
-clear_screen
-" Bank of Garbage " .
-10 0 " Enter Balance: 00000 " pasp
-10 16 move_cursor stdin toint " balance " set
-" enough_money " word
-" Saving balance " .n
-" bank.txt " open_file_write " file " set
-" file " get " balance " get tostr swap write_file
-" file " get close_file
+" change_account_balance " word
+0 " iter " set 
+" current_account_name " set
+" current_account_balance " set
+" balances.txt " open_file read_file space swap split " file_split " set
+" file_split " get for
+" iter " iterate
+" current_account_name " get if =
+" Found account " .n
+" " .n
+" Old balance is: " . space . " file_split " get " iter " get index .n
+" balances.txt " open_file " iter " get " new_bal " get index_write
+" New balance is: " . space . " new_bal " get .n stdin pop
+endif
+endfor
 endword
-99999 " balance " get if <
-enough_money
+" change_bal " word
+clear_screen
+0 0 move_cursor " Balance Changing Menu " .
+10 0 move_cursor " Please enter the account name: " . space . stdin " account_name " set  
+clear_screen
+0 0 move_cursor " Balance Changing Menu " .
+10 0 move_cursor " Please enter the new balance: " . space . stdin toint " new_bal " set
+" new_bal " get " account_name " get change_account_balance
+endword
+" view_bal " word
+0 " iter " set
+clear_screen
+0 0 move_cursor " Balance Viewing Menu " .
+10 0 move_cursor " Please enter the account name: " . space . stdin " account_name " set
+" balances.txt " open_file read_file space swap split " file_split " set " file_split " get for
+" account_name " get if = 
+" Found account " .n
+" Current balance is: " . space . " file_split " get " iter " get 1 + index .n stdin pop
 endif
-99999 " balance " get if =
-enough_money
+endfor
+endword
+0 loop
+clear_screen
+0 0 move_cursor " Menu " .
+10 0 move_cursor
+" Choice ( c - Change Balance, v - View Balance, q - Quit ): " . space . stdin " choice " set
+" choice " get " c " if =
+change_bal
 endif
-99999 " balance " get if >
-" Too much money " .n
+" choice " get " v " if =
+view_bal
 endif
+endloop
