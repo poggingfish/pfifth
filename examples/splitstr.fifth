@@ -1,3 +1,4 @@
+" std.fifth " execute
 " Hello, world! " space swap split
 for
 . nl
