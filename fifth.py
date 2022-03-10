@@ -258,6 +258,19 @@ def run(program):
                 stack.append(open(current_file, "w"))
                 pop3 = stack.pop()
                 pop3.write(final)
+            elif x == "start_timer":
+                start_time = time.perf_counter()
+            elif x == "end_timer":
+                # Returns the time in seconds since the start_timer command was run rounded to 1 decimal place
+                stack.append(round(time.perf_counter() - start_time, 1))
+            elif x == "terminate":
+                exit(0)
+            elif x == "term_width":
+                # Push the width of the terminal to the stack
+                stack.append(os.get_terminal_size()[0])
+            elif x == "term_height":
+                # Push the height of the terminal to the stack
+                stack.append(os.get_terminal_size()[1])
             elif x == "bye" and interactive == True:
                 print("Bye!")
                 exit(0)
