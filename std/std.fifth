@@ -36,8 +36,3 @@ endword
 " ___string " get
 32 emit + " ___string2 " get +
 endword
-" reset_array " word
-for
-array_pop pop
-endfor
-endword

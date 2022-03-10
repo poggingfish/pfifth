@@ -1,3 +1,7 @@
 __pycache__/*
 *.pyc
 builtins.fifth
+output/*
+out.cs
+out.out
+test.fifth

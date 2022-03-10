@@ -28,7 +28,7 @@ def run(program):
     load = False
     load_type = ""
     for x in program:
-        #try:
+        try:
             if load == True:
                 if x == "endword":
                     if load_type == "word":
@@ -266,16 +266,16 @@ def run(program):
                     print(i)
             else:
                 stack.append(int(x))
-        #except Exception as e:
+        except Exception as e:
             #Check if exception is keyboard interrupt
-        #    if e == KeyboardInterrupt:
-        #        print("KeyboardInterrupt")
-        #        exit(0)
-        #    print("Something went wrong at instruction "+str(x))
-        #    if interactive != True:
-        #        exit(1)
-        #    load = False
-        #    load_data = []
+            if e == KeyboardInterrupt:
+                print("KeyboardInterrupt")
+                exit(0)
+            print("Something went wrong at instruction "+str(x))
+            if interactive != True:
+                exit(1)
+            load = False
+            load_data = []
 interactive = False
 run(load_builtins())
 for x in sys.argv[1:]:
