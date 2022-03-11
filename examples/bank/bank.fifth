@@ -34,6 +34,7 @@ clear_screen
 " Found account " .n
 " Current balance is: " . space . " file_split " get " iter " get 1 + index .n stdin pop
 endif
+" iter " iterate
 endfor
 endword
 0 loop

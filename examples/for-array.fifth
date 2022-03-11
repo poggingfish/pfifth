@@ -1,8 +1,8 @@
 array_init " array " set
-" array " get 1 array_add
-" array " get 2 array_add
-" array " get 3 array_add
-" array " get 4 array_add
+" array " get 1 array_add " array " set
+" array " get 2 array_add " array " set
+" array " get 3 array_add " array " set
+" array " get 4 array_add " array " set
 " array " get
 for
 . nl

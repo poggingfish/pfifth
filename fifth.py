@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 import os
 import time, sys, random
+live_mode = False
 stack = []
 program = []
 words = {}
 variables = {}
+execute = False
 current_file = ""
 def print_there(x, y, text):
      sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (x, y, text))
@@ -18,6 +20,7 @@ def load_program(file):
 def load_builtins():
     return ['"', 'nl', '"', 'word', '10', 'emit', '.', 'endword', '"', 'iterate', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '+', '"', 'var', '"', 'get', 'set', 'endword', '"', 'decrement', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '-', '"', 'var', '"', 'get', 'set', 'endword']
 def run(program):
+    global execute
     global stack
     global load_program
     global variables
@@ -174,11 +177,13 @@ def run(program):
             elif x == "get":
                 stack.append(variables[stack.pop()])
             elif x == "execute":
+                execute = True
                 run_program = stack.pop()
                 try:
                     run(load_program(open(run_program)))
                 except:
                     run(load_program(open("/usr/share/fifth/" + run_program)))
+                execute = False
             elif x == "words":
                 for x in words:
                     print(x)
@@ -277,14 +282,21 @@ def run(program):
             elif x == "stack" and interactive == True:
                 for i in stack:
                     print(i)
+            elif x == "raise":
+                print("Program terminated!")
+                temp1 = stack.pop()
+                temp2 = stack.pop()
+                print(temp2)
+                exit(temp1)
             else:
                 stack.append(int(x))
-        except Exception as e:
+            if live_mode and execute == False:
+                time.sleep(0.1)
+                print(stack)
+        except FloatingPointError:
             #Check if exception is keyboard interrupt
-            if e == KeyboardInterrupt:
-                print("KeyboardInterrupt")
-                exit(0)
             print("Something went wrong at instruction "+str(x))
+            print("Stack:"+str(stack))
             if interactive != True:
                 exit(1)
             load = False
@@ -318,5 +330,10 @@ for x in sys.argv[1:]:
     if x == "load-program":
         print(load_program(open(sys.argv[2])))
         exit(0)
+try:
+    if sys.argv[2] == "livestack":
+        live_mode = True
+except:
+    pass
 program = load_program(open(sys.argv[1]))
 run(program)
