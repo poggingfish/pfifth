@@ -19,7 +19,7 @@ def load_program(file):
     return file.read().replace("\n"," ").split()
 def load_builtins():
     return ['"', 'nl', '"', 'word', '10', 'emit', '.', 'endword', '"', 'iterate', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '+', '"', 'var', '"', 'get', 'set', 'endword', '"', 'decrement', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '-', '"', 'var', '"', 'get', 'set', 'endword']
-def run(program):
+def run(program, debug=False):
     global execute
     global stack
     global load_program
@@ -48,10 +48,10 @@ def run(program):
                         load = False
                         if loop_amount == 0:
                             while True:
-                                run(load_data[0:])
+                                run(load_data[0:], debug)
                         else:
                             for x in range(loop_amount):
-                                run(load_data[0:])
+                                run(load_data[0:], debug)
                         load_data = []
                         continue
                 if load_type == "while":
@@ -59,16 +59,16 @@ def run(program):
                         load = False
                         if load_data[0] == "=":
                             while stack.pop() == stack.pop():
-                                run(load_data[1:])
+                                run(load_data[1:], debug)
                         if load_data[0] == "!":
                             while stack.pop() != stack.pop():
-                                run(load_data[1:])
+                                run(load_data[1:], debug)
                         if load_data[0] == "<":
                             while stack.pop() < stack.pop():
-                                run(load_data[1:])
+                                run(load_data[1:], debug)
                         if load_data[0] == ">":
                             while stack.pop() > stack.pop():
-                                run(load_data[1:]) 
+                                run(load_data[1:], debug) 
                         load_data = []
                         continue
                 if load_type == "string":
@@ -86,51 +86,85 @@ def run(program):
                     previous_if1 = if1
                     previous_if2 = if2
                     if x == "endif":
+                        sign = load_data[0]
                         if load_data[0] == "=":
                             if if1 == if2:
-                                run(load_data[1:])
+                                run(load_data[1:], debug)
                         if load_data[0] == "!":
                             if if1 != if2:
-                                run(load_data[1:])
+                                run(load_data[1:], debug)
                         if load_data[0] == "<":
                             if if1 < if2:
-                                run(load_data[1:])
+                                run(load_data[1:], debug)
                         if load_data[0] == ">":
                             if if1 > if2:
-                                run(load_data[1:])
+                                run(load_data[1:], debug)
                         load = False
                         load_data = []
                         continue
                 if load_type == "else":
                     if x == "endif":
+                        sign = load_data[0]
                         if previous_if1!=previous_if2 and if1==if2:
                             if load_data[0] == "=":
                                 if if1 == if2:
-                                 run(load_data[1:])
+                                 run(load_data[1:], debug)
                             if load_data[0] == "!":
                                 if if1 != if2:
-                                    run(load_data[1:])
+                                    run(load_data[1:], debug)
                             if load_data[0] == "<":
                                 if if1 < if2:
-                                    run(load_data[1:])
+                                    run(load_data[1:], debug)
                             if load_data[0] == ">":
                                 if if1 > if2:
-                                    run(load_data[1:])
+                                    run(load_data[1:], debug)
+                            previous_if1 = if1
+                            previous_if2 = if2
                             load = False
                             load_data = []
                             continue
+                        continue
+                if load_type == "elsf":
+                    if x == "endif":
+                        if sign == "=":
+                            if previous_if2 != previous_if1:
+                                run(load_data[1:], debug)
+                        if sign == "!":
+                            if previous_if1 == previous_if2:
+                                run(load_data[1:], debug)
+                        if sign == "<":
+                            if previous_if2 > previous_if1:
+                                run(load_data[1:], debug)
+                        if sign == ">":
+                            if previous_if2 < previous_if1:
+                                run(load_data[1:], debug)
+                        previous_if1 = None
+                        previous_if2 = None
+                        load = False
+                        load_data = []
+                        continue
                 if load_type == "for":
                     if x == "endfor":
                         for x in stack.pop():
                             stack.append(x)
-                            run(load_data[0:])
+                            run(load_data[0:], debug)
                         load = False
                         load_data = []
                         continue
+                if load_type == "shebang":
+                    if x == "endignore":
+                        load=False
+                        load_data = []
+                        continue
+                if debug == True:
+                    print("Loaded " + x)
                 load_data.append(x.replace("n:",""))
                 continue
             if x in words:
                 run(words[x].split(" "))
+            elif x.startswith("#!"):
+                load_type = "shebang"
+                load = True
             elif x == "+":
                 stack.append(stack.pop() + stack.pop())
             elif x == "-":
@@ -194,6 +228,9 @@ def run(program):
                 load = True
             elif x == "else":
                 load_type = "else"
+                load = True
+            elif x == "elsf":
+                load_type = "elsf"
                 load = True
             elif x == "#":
                 load_type="ignore"
@@ -288,20 +325,27 @@ def run(program):
                 temp2 = stack.pop()
                 print(temp2)
                 exit(temp1)
+            elif x == "run_sys":
+                os.system(stack.pop())
+            elif x == "pargs":
+                stack.append(sys.argv)
             else:
                 stack.append(int(x))
             if live_mode and execute == False:
                 time.sleep(0.1)
                 print(stack)
-        except FloatingPointError:
+        except:
             #Check if exception is keyboard interrupt
             print("Something went wrong at instruction "+str(x))
             print("Stack:"+str(stack))
+            if execute == True:
+                print("Program was nested!")
             if interactive != True:
                 exit(1)
             load = False
             load_data = []
 interactive = False
+debug = False
 run(load_builtins())
 for x in sys.argv[1:]:
     if x == "install":
@@ -330,10 +374,13 @@ for x in sys.argv[1:]:
     if x == "load-program":
         print(load_program(open(sys.argv[2])))
         exit(0)
+    if x == "debug":
+        debug=True
 try:
     if sys.argv[2] == "livestack":
         live_mode = True
 except:
     pass
+
 program = load_program(open(sys.argv[1]))
-run(program)
+run(program, debug)
