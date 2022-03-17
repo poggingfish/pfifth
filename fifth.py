@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
+from decimal import DivisionByZero
 import os
 import time, sys, random
 live_mode = False
 stack = []
+macros = {}
 program = []
+livetimer = 0.0
 words = {}
 variables = {}
 execute = False
@@ -27,6 +30,7 @@ def run(program, debug=False):
     global words
     global interactive
     global current_file
+    global livetimer
     load_data = []
     load = False
     load_type = ""
@@ -113,10 +117,10 @@ def run(program, debug=False):
                                 if if1 != if2:
                                     run(load_data[1:], debug)
                             if load_data[0] == "<":
-                                if if1 < if2:
+                                if if1 > if2:
                                     run(load_data[1:], debug)
                             if load_data[0] == ">":
-                                if if1 > if2:
+                                if if1 < if2:
                                     run(load_data[1:], debug)
                             previous_if1 = if1
                             previous_if2 = if2
@@ -133,10 +137,10 @@ def run(program, debug=False):
                             if previous_if1 == previous_if2:
                                 run(load_data[1:], debug)
                         if sign == "<":
-                            if previous_if2 > previous_if1:
+                            if previous_if2 < previous_if1:
                                 run(load_data[1:], debug)
                         if sign == ">":
-                            if previous_if2 < previous_if1:
+                            if previous_if2 > previous_if1:
                                 run(load_data[1:], debug)
                         previous_if1 = None
                         previous_if2 = None
@@ -332,7 +336,7 @@ def run(program, debug=False):
             else:
                 stack.append(int(x))
             if live_mode and execute == False:
-                time.sleep(0.1)
+                time.sleep(livetimer)
                 print(stack)
         except:
             #Check if exception is keyboard interrupt
@@ -360,7 +364,7 @@ for x in sys.argv[1:]:
                     os.mkdir("/usr/share/fifth/")
                 except:
                     pass
-                os.system("cp std/std.fifth /usr/share/fifth/std.fifth")
+                os.system("cp std/* /usr/share/fifth/")
             elif std == "n":
                 print("Okay, I won't install the standard word library.")
             else:
@@ -378,7 +382,12 @@ for x in sys.argv[1:]:
         debug=True
 try:
     if sys.argv[2] == "livestack":
-        live_mode = True
+        try:
+            live_mode = True
+            livetimer = float(sys.argv[3])
+        except:
+            livetimer = 0.1
+            live_mode = True
 except:
     pass
 

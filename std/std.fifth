@@ -36,3 +36,12 @@ endword
 " ___string " get
 32 emit + " ___string2 " get +
 endword
+" flip " word
+" ___flip " set
+" ___flip " get 0 if =
+1
+endif
+" ___flip " get 0 if >
+0
+endif
+endword
