@@ -1,4 +1,5 @@
 " std.fifth " execute
+start_timer
 " In this game you have to guess the number between 1 and 500. " .n
 500 1 random " random " set
 0 " guess " set
@@ -20,3 +21,6 @@ endif
 " guess " get 1 if =
 " You got it in " . space . " guess " get . space . " try " .n
 endif
+" You got it in " . space .
+end_timer . space .
+" seconds " .n 

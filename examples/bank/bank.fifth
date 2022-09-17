@@ -48,4 +48,7 @@ endif
 " choice " get " v " if =
 view_bal
 endif
+" choice " get " q " if =
+0 raise
+endif
 endloop

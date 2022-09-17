@@ -1,1 +1,1 @@
-Tom 7000 Alice 9000 Bob 4000
+Tom 7000 Alice 1 Bob 1   

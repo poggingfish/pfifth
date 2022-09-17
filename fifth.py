@@ -1,7 +1,8 @@
-#!/usr/bin/env python3
-from decimal import DivisionByZero
+#!/usr/bin/env python
 import os
-import time, sys, random
+import time
+import sys
+import random
 live_mode = False
 stack = []
 macros = {}
@@ -11,18 +12,36 @@ words = {}
 variables = {}
 execute = False
 current_file = ""
+
+
 def print_there(x, y, text):
-     sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (x, y, text))
-     sys.stdout.flush()
-def move (x, y):
+    sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (x, y, text))
+    sys.stdout.flush()
+
+
+def move(x, y):
     sys.stdout.write("\033[%d;%dH" % (y, x))
     sys.stdout.flush()
+
+
 def load_program(file):
     global program
-    return file.read().replace("\n"," ").split()
+    return file.read().replace("\n", " ").split()
+
+
 def load_builtins():
-    return ['"', 'nl', '"', 'word', '10', 'emit', '.', 'endword', '"', 'iterate', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '+', '"', 'var', '"', 'get', 'set', 'endword', '"', 'decrement', '"', 'word', '"', 'var', '"', 'set', '"', 'var', '"', 'get', 'get', '1', '-', '"', 'var', '"', 'get', 'set', 'endword']
+    return ['"', 'nl', '"', 'word', '10', 'emit', '.', 'endword', '"',
+            'iterate', '"', 'word', '"', 'var', '"', 'set', '"', 'var',
+            '"', 'get', 'get', '1', '+', '"', 'var', '"', 'get', 'set',
+            'endword', '"', 'decrement', '"', 'word', '"', 'var', '"',
+            'set', '"', 'var', '"', 'get', 'get', '1', '-',
+            '"', 'var', '"', 'get', 'set', 'endword']
+
+
 def run(program, debug=False):
+    if1 = ""
+    if2 = ""
+    word_name = ""
     global execute
     global stack
     global load_program
@@ -36,7 +55,7 @@ def run(program, debug=False):
     load_type = ""
     for x in program:
         try:
-            if load == True:
+            if load:
                 if x == "endword":
                     if load_type == "word":
                         load = False
@@ -72,7 +91,7 @@ def run(program, debug=False):
                                 run(load_data[1:], debug)
                         if load_data[0] == ">":
                             while stack.pop() > stack.pop():
-                                run(load_data[1:], debug) 
+                                run(load_data[1:], debug)
                         load_data = []
                         continue
                 if load_type == "string":
@@ -109,10 +128,10 @@ def run(program, debug=False):
                 if load_type == "else":
                     if x == "endif":
                         sign = load_data[0]
-                        if previous_if1!=previous_if2 and if1==if2:
+                        if previous_if1 != previous_if2 and if1 == if2:
                             if load_data[0] == "=":
                                 if if1 == if2:
-                                 run(load_data[1:], debug)
+                                    run(load_data[1:], debug)
                             if load_data[0] == "!":
                                 if if1 != if2:
                                     run(load_data[1:], debug)
@@ -157,12 +176,12 @@ def run(program, debug=False):
                         continue
                 if load_type == "shebang":
                     if x == "endignore":
-                        load=False
+                        load = False
                         load_data = []
                         continue
-                if debug == True:
+                if debug:
                     print("Loaded " + x)
-                load_data.append(x.replace("n:",""))
+                load_data.append(x.replace("n:", ""))
                 continue
             if x in words:
                 run(words[x].split(" "))
@@ -219,7 +238,7 @@ def run(program, debug=False):
                 run_program = stack.pop()
                 try:
                     run(load_program(open(run_program)))
-                except:
+                except FileNotFoundError:
                     run(load_program(open("/usr/share/fifth/" + run_program)))
                 execute = False
             elif x == "words":
@@ -237,8 +256,8 @@ def run(program, debug=False):
                 load_type = "elsf"
                 load = True
             elif x == "#":
-                load_type="ignore"
-                load=True
+                load_type = "ignore"
+                load = True
             elif x == "array_init":
                 new_array = []
                 stack.append(new_array)
@@ -249,8 +268,8 @@ def run(program, debug=False):
             elif x == "length":
                 stack.append(len(stack.pop()))
             elif x == "for":
-                load_type="for"
-                load=True
+                load_type = "for"
+                load = True
             elif x == "index":
                 pop1 = stack.pop()
                 pop2 = stack.pop()
@@ -273,7 +292,7 @@ def run(program, debug=False):
                 pop3 = stack.pop()
                 print_there(pop3, pop2, pop1)
             elif x == "move_cursor":
-                move(stack.pop(), stack.pop())              
+                move(stack.pop(), stack.pop())
             elif x == "clear_screen":
                 print("\033[2J")
             elif x == "open_file":
@@ -286,6 +305,8 @@ def run(program, debug=False):
                 stack.append(open(file, "w"))
             elif x == "read_file":
                 stack.append(stack.pop().read())
+            elif x == "clear_file":
+                open(stack.pop(), "w").close()
             elif x == "write_file":
                 stack.append(stack.pop().write(stack.pop()))
             elif x == "close_file":
@@ -307,7 +328,8 @@ def run(program, debug=False):
             elif x == "start_timer":
                 start_time = time.perf_counter()
             elif x == "end_timer":
-                # Returns the time in seconds since the start_timer command was run rounded to 1 decimal place
+                # Returns the time in seconds since the
+                # start_timer command was run rounded to 1 decimal place
                 stack.append(round(time.perf_counter() - start_time, 1))
             elif x == "terminate":
                 exit(0)
@@ -317,10 +339,10 @@ def run(program, debug=False):
             elif x == "term_height":
                 # Push the height of the terminal to the stack
                 stack.append(os.get_terminal_size()[1])
-            elif x == "bye" and interactive == True:
+            elif x == "bye" and interactive:
                 print("Bye!")
                 exit(0)
-            elif x == "stack" and interactive == True:
+            elif x == "stack" and interactive:
                 for i in stack:
                     print(i)
             elif x == "raise":
@@ -328,29 +350,46 @@ def run(program, debug=False):
                 temp1 = stack.pop()
                 temp2 = stack.pop()
                 print(temp2)
-                exit(temp1)
+                sys.exit(temp1)
             elif x == "run_sys":
                 os.system(stack.pop())
             elif x == "pargs":
                 stack.append(sys.argv)
+            elif x == "touch":
+                # Create a file with the name on the stack
+                open(stack.pop(), "a").close()
             else:
                 stack.append(int(x))
-            if live_mode and execute == False:
+            if live_mode and execute is False:
                 time.sleep(livetimer)
                 print(stack)
-        except:
-            #Check if exception is keyboard interrupt
+                print("Variables: "+str(variables))
+        except Exception as e:
+            e.__traceback__
+            # Check if exception is keyboard interrupt
             print("Something went wrong at instruction "+str(x))
             print("Stack:"+str(stack))
-            if execute == True:
+            if execute:
                 print("Program was nested!")
-            if interactive != True:
+            if interactive is False:
                 exit(1)
             load = False
             load_data = []
+
+
 interactive = False
 debug = False
 run(load_builtins())
+try:
+    if sys.argv[2] == "--live":
+        try:
+            live_mode = True
+            livetimer = float(sys.argv[3])
+        except IndexError:
+            livetimer = 0.1
+            live_mode = True
+except IndexError:
+    pass
 for x in sys.argv[1:]:
     if x == "install":
         if os.geteuid() != 0:
@@ -358,17 +397,25 @@ for x in sys.argv[1:]:
             exit(1)
         else:
             os.system("cp fifth.py /usr/bin/fifth")
-            std = input("Would you like to install the standard word library? (y/n) ")
+            std = input("""
+Would you like to install the standard word library? (y/n)
+                        """)
             if std == "y":
                 try:
+                    print("Please run chown " +
+                          "-R username:username " +
+                          "/usr/share/fifth/temp.tmp after installing")
                     os.mkdir("/usr/share/fifth/")
-                except:
+                    os.system("touch /usr/share/fifth/temp.tmp")
+                except Exception as e:
+                    e.__traceback__
                     pass
                 os.system("cp std/* /usr/share/fifth/")
             elif std == "n":
                 print("Okay, I won't install the standard word library.")
             else:
-                print("I don't understand that. And I won't install the standard word library.")
+                print("I don't understand that. " +
+                      "And I won't install the standard word library.")
             print("Installed!")
             exit(0)
     if x == "builtins":
@@ -379,17 +426,7 @@ for x in sys.argv[1:]:
         print(load_program(open(sys.argv[2])))
         exit(0)
     if x == "debug":
-        debug=True
-try:
-    if sys.argv[2] == "livestack":
-        try:
-            live_mode = True
-            livetimer = float(sys.argv[3])
-        except:
-            livetimer = 0.1
-            live_mode = True
-except:
-    pass
+        debug = True
 
 program = load_program(open(sys.argv[1]))
 run(program, debug)

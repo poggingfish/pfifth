@@ -45,3 +45,15 @@ endif
 0
 endif
 endword
+" array_swap " word
+array_pop
+array_pop
+array_add
+array_add
+endword
+" expo " word
+" /usr/share/fifth/temp.tmp " clear_file
+space " >> /usr/share/fifth/temp.tmp " swap + swap + run_sys
+" /usr/share/fifth/temp.tmp " open_file read_file space split
+" /usr/share/fifth/temp.tmp " clear_file
+endword
