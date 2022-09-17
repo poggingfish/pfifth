@@ -1,2 +1,2 @@
 " std.fifth " execute
-pargs 1 index open_file read_file .
+pargs 2 index open_file read_file .
